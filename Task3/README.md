@@ -14,9 +14,9 @@
 ```bash
 minikube start --cpus=4 --memory=6144
 minikube addons enable metrics-server
-kubectl apply -f deployment.yaml
-kubectl apply -f service.yaml
-kubectl apply -f hpa.yaml
+kubectl apply -f Task3/deployment.yaml
+kubectl apply -f Task3/service.yaml
+kubectl apply -f Task3/hpa.yaml
 kubectl get pods
 kubectl top pods
 kubectl get hpa -w
@@ -71,6 +71,6 @@ curl http://localhost:8080/metrics | grep http_requests_total
 
 ## Замечание по локальной машине
 
-Образ `ghcr.io/yandex-practicum/scaletestapp:latest` не содержит сборку для `linux/arm64`. На Apple Silicon пришлось заранее скачать вариант `linux/amd64`, загрузить его в Minikube и оставить в манифесте `imagePullPolicy: IfNotPresent`. Ещё отключён sidecar-контейнер Istio через `sidecar.istio.io/inject: "false"`: в локальном пространстве имён `default` уже был включён Istio, и его контейнер добавлял бы свою память к тестовому приложению.
+Образ `ghcr.io/yandex-practicum/scaletestapp:latest` не содержит сборку для `linux/arm64`. На Apple Silicon заранее загружался вариант `linux/amd64` в Minikube; в манифесте оставлен `imagePullPolicy: IfNotPresent`. Также отключён вспомогательный контейнер Istio через `sidecar.istio.io/inject: "false"`: в локальном пространстве имён `default` уже был включён Istio, а его контейнер добавлял бы свою память к тестовому приложению.
 
 HPA масштабирует поды приложения, а не базу данных. Фраза в задании про «реплики базы данных» к этому тестовому образу не относится; в evidence показано изменение числа реплик развёртывания `scaletestapp`.
