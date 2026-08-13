@@ -2,12 +2,13 @@
 
 **Принцип хореографии.** Нет центрального сервиса, который посылает остальным команды «оплатить», «зарезервировать» или «доставить». Каждый сервис подписывается на доменное событие, выполняет своё локальное действие и публикует новый факт. `Order Service` владеет только агрегатом заказа и реактивно меняет его статус; он не управляет другими сервисами.
 
-**Корреляция и порядок.** В каждое событие добавляются `eventId`, `eventType`, `eventVersion`, `occurredAt`, `correlationId` и `orderId`. Ключ Kafka — `orderId`. Доставка `at-least-once`, поэтому каждый потребитель дедуплицирует `eventId`.
+**Корреляция и порядок.** В каждое событие добавляются `eventId`, `eventType`, `eventVersion`, `occurredAt`, `correlationId` и `orderId`. Ключ Kafka — `orderId`. Доставка выполняется как минимум один раз, поэтому каждый потребитель исключает повторную обработку по `eventId`.
 
 | Логический этап | Тип события | Название | Издатель | Реакция потребителя |
 | --- | --- | --- | --- | --- |
 | Заказ создан | domain | `OrderCreated` | Order Service | Inventory Service проверяет остатки и создаёт резерв. |
 | Товары успешно зарезервированы | domain | `InventoryReserved` | Inventory Service | Payment Service создаёт платёж и предоставляет покупателю платёжный сценарий. |
+| Платёж создан | domain | `PaymentCreated` | Payment Service | Order Service сохраняет идентификатор платежа и ссылку на оплату. Клиент получает их при запросе статуса заказа; для привязанной карты запускается автоматическая оплата. |
 | Товаров недостаточно / резерв не создан | failure | `InventoryReservationFailed` | Inventory Service | Order Service переводит заказ в `cancelled`. Оплата не начинается. |
 | Оплата проведена | domain | `PaymentSucceeded` | Payment Service | Delivery Service создаёт доставку; Order Service сохраняет `paid`. |
 | Оплата отклонена | failure | `PaymentFailed` | Payment Service | Inventory Service снимает резерв; Order Service сохраняет причину отмены. |
