@@ -13,8 +13,9 @@ participant "Notification Service" as N
 
 B -> O: POST /orders (ключ идемпотентности)
 activate O
-O -> O: Создать заказ = reservation_pending\nи записать OrderCreated в outbox\nодной транзакцией
+O -> O: Создать заказ = reservation_pending\nи записать OrderCreated в таблицу исходящих сообщений\nодной транзакцией
 O -> K: Опубликовать OrderCreated
+O --> B: 202 Accepted, orderId
 deactivate O
 K -> I: OrderCreated
 activate I
@@ -22,12 +23,18 @@ I -> I: Проверить остатки и создать резерв
 I -> K: Опубликовать InventoryReserved
 deactivate I
 K -> O: InventoryReserved
-O -> O: Заказ = payment_pending
 K -> P: InventoryReserved
 activate P
-P -> P: Создать платёжный сценарий
-P --> B: Платёжная страница / подтверждение привязанной картой
+P -> PP: Создать платёжную сессию / автоплатёж
+PP --> P: paymentId, ссылка на оплату\nили подтверждение автоплатежа
+P -> K: Опубликовать PaymentCreated
+deactivate P
+K -> O: PaymentCreated
+O -> O: Заказ = payment_pending, сохранить paymentId\nи ссылку на оплату
+B -> O: GET /orders/{orderId}
+O --> B: Ссылка на платёжную страницу\nили статус автоплатежа
 B -> PP: Подтвердить оплату
+activate P
 PP --> P: Успех
 P -> K: Опубликовать PaymentSucceeded
 deactivate P
@@ -46,7 +53,7 @@ else
 end
 K -> O: DeliveryCreated
 activate O
-O -> O: Заказ = preparing_for_shipment\nи OrderConfirmed в outbox
+O -> O: Заказ = preparing_for_shipment\nи OrderConfirmed в таблицу исходящих сообщений
 O -> K: Опубликовать OrderConfirmed
 deactivate O
 K -> N: OrderConfirmed
