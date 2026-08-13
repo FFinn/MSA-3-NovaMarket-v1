@@ -1,0 +1,9 @@
+Thu Aug 13 10:15:50 +05 2026
+NAME           REFERENCE                 TARGETS           MINPODS   MAXPODS   REPLICAS   AGE
+scaletestapp   Deployment/scaletestapp   memory: 32%/80%   1         10        1          3m28s
+NAME           READY   UP-TO-DATE   AVAILABLE   AGE     CONTAINERS     IMAGES                                         SELECTOR
+scaletestapp   1/1     1            1           3m28s   scaletestapp   ghcr.io/yandex-practicum/scaletestapp:latest   app=scaletestapp
+NAME                            READY   STATUS    RESTARTS   AGE   IP            NODE       NOMINATED NODE   READINESS GATES
+scaletestapp-5bff4bc847-cn6pd   1/1     Running   0          60s   10.244.0.46   minikube   <none>           <none>
+NAME                            CPU(cores)   MEMORY(bytes)   
+scaletestapp-5bff4bc847-cn6pd   2m           9Mi             

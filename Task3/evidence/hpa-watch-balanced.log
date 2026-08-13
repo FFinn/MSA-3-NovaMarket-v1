@@ -1,0 +1,153 @@
+===== 2026-08-13 10:19:07 =====
+NAME           REFERENCE                 TARGETS           MINPODS   MAXPODS   REPLICAS   AGE
+scaletestapp   Deployment/scaletestapp   memory: 54%/80%   1         10        1          6m45s
+NAME           READY   UP-TO-DATE   AVAILABLE   AGE     CONTAINERS     IMAGES                                         SELECTOR
+scaletestapp   1/1     1            1           6m45s   scaletestapp   ghcr.io/yandex-practicum/scaletestapp:latest   app=scaletestapp
+NAME                            READY   STATUS    RESTARTS   AGE   IP            NODE       NOMINATED NODE   READINESS GATES
+scaletestapp-847c45c655-844h5   1/1     Running   0          85s   10.244.0.47   minikube   <none>           <none>
+NAME                            CPU(cores)   MEMORY(bytes)   
+scaletestapp-847c45c655-844h5   2m           4Mi             
+===== 2026-08-13 10:19:18 =====
+NAME           REFERENCE                 TARGETS           MINPODS   MAXPODS   REPLICAS   AGE
+scaletestapp   Deployment/scaletestapp   memory: 54%/80%   1         10        1          6m56s
+NAME           READY   UP-TO-DATE   AVAILABLE   AGE     CONTAINERS     IMAGES                                         SELECTOR
+scaletestapp   1/1     1            1           6m56s   scaletestapp   ghcr.io/yandex-practicum/scaletestapp:latest   app=scaletestapp
+NAME                            READY   STATUS    RESTARTS   AGE   IP            NODE       NOMINATED NODE   READINESS GATES
+scaletestapp-847c45c655-844h5   1/1     Running   0          96s   10.244.0.47   minikube   <none>           <none>
+NAME                            CPU(cores)   MEMORY(bytes)   
+scaletestapp-847c45c655-844h5   2m           4Mi             
+===== 2026-08-13 10:19:28 =====
+NAME           REFERENCE                 TARGETS           MINPODS   MAXPODS   REPLICAS   AGE
+scaletestapp   Deployment/scaletestapp   memory: 54%/80%   1         10        1          7m6s
+NAME           READY   UP-TO-DATE   AVAILABLE   AGE    CONTAINERS     IMAGES                                         SELECTOR
+scaletestapp   1/1     1            1           7m6s   scaletestapp   ghcr.io/yandex-practicum/scaletestapp:latest   app=scaletestapp
+NAME                            READY   STATUS    RESTARTS   AGE    IP            NODE       NOMINATED NODE   READINESS GATES
+scaletestapp-847c45c655-844h5   1/1     Running   0          106s   10.244.0.47   minikube   <none>           <none>
+NAME                            CPU(cores)   MEMORY(bytes)   
+scaletestapp-847c45c655-844h5   2m           4Mi             
+===== 2026-08-13 10:19:38 =====
+NAME           REFERENCE                 TARGETS            MINPODS   MAXPODS   REPLICAS   AGE
+scaletestapp   Deployment/scaletestapp   memory: 367%/80%   1         10        1          7m16s
+NAME           READY   UP-TO-DATE   AVAILABLE   AGE     CONTAINERS     IMAGES                                         SELECTOR
+scaletestapp   1/2     2            1           7m16s   scaletestapp   ghcr.io/yandex-practicum/scaletestapp:latest   app=scaletestapp
+NAME                            READY   STATUS              RESTARTS     AGE    IP            NODE       NOMINATED NODE   READINESS GATES
+scaletestapp-847c45c655-844h5   1/1     Running             1 (5s ago)   116s   10.244.0.47   minikube   <none>           <none>
+scaletestapp-847c45c655-ds9ph   0/1     ContainerCreating   0            0s     <none>        minikube   <none>           <none>
+NAME                            CPU(cores)   MEMORY(bytes)   
+scaletestapp-847c45c655-844h5   30m          29Mi            
+===== 2026-08-13 10:19:48 =====
+NAME           REFERENCE                 TARGETS            MINPODS   MAXPODS   REPLICAS   AGE
+scaletestapp   Deployment/scaletestapp   memory: 367%/80%   1         10        1          7m26s
+NAME           READY   UP-TO-DATE   AVAILABLE   AGE     CONTAINERS     IMAGES                                         SELECTOR
+scaletestapp   2/2     2            2           7m26s   scaletestapp   ghcr.io/yandex-practicum/scaletestapp:latest   app=scaletestapp
+NAME                            READY   STATUS    RESTARTS      AGE    IP            NODE       NOMINATED NODE   READINESS GATES
+scaletestapp-847c45c655-844h5   1/1     Running   1 (15s ago)   2m6s   10.244.0.47   minikube   <none>           <none>
+scaletestapp-847c45c655-ds9ph   1/1     Running   0             10s    10.244.0.48   minikube   <none>           <none>
+NAME                            CPU(cores)   MEMORY(bytes)   
+scaletestapp-847c45c655-844h5   30m          29Mi            
+===== 2026-08-13 10:19:59 =====
+NAME           REFERENCE                 TARGETS            MINPODS   MAXPODS   REPLICAS   AGE
+scaletestapp   Deployment/scaletestapp   memory: 367%/80%   1         10        2          7m37s
+NAME           READY   UP-TO-DATE   AVAILABLE   AGE     CONTAINERS     IMAGES                                         SELECTOR
+scaletestapp   2/2     2            2           7m37s   scaletestapp   ghcr.io/yandex-practicum/scaletestapp:latest   app=scaletestapp
+NAME                            READY   STATUS    RESTARTS      AGE     IP            NODE       NOMINATED NODE   READINESS GATES
+scaletestapp-847c45c655-844h5   1/1     Running   1 (26s ago)   2m17s   10.244.0.47   minikube   <none>           <none>
+scaletestapp-847c45c655-ds9ph   1/1     Running   0             21s     10.244.0.48   minikube   <none>           <none>
+NAME                            CPU(cores)   MEMORY(bytes)   
+scaletestapp-847c45c655-844h5   30m          29Mi            
+===== 2026-08-13 10:20:09 =====
+NAME           REFERENCE                 TARGETS            MINPODS   MAXPODS   REPLICAS   AGE
+scaletestapp   Deployment/scaletestapp   memory: 367%/80%   1         10        2          7m47s
+NAME           READY   UP-TO-DATE   AVAILABLE   AGE     CONTAINERS     IMAGES                                         SELECTOR
+scaletestapp   4/4     4            4           7m47s   scaletestapp   ghcr.io/yandex-practicum/scaletestapp:latest   app=scaletestapp
+NAME                            READY   STATUS    RESTARTS      AGE     IP            NODE       NOMINATED NODE   READINESS GATES
+scaletestapp-847c45c655-844h5   1/1     Running   1 (36s ago)   2m27s   10.244.0.47   minikube   <none>           <none>
+scaletestapp-847c45c655-ds9ph   1/1     Running   0             31s     10.244.0.48   minikube   <none>           <none>
+scaletestapp-847c45c655-tn2dr   1/1     Running   0             1s      10.244.0.49   minikube   <none>           <none>
+scaletestapp-847c45c655-wzc7n   1/1     Running   0             1s      10.244.0.50   minikube   <none>           <none>
+NAME                            CPU(cores)   MEMORY(bytes)   
+scaletestapp-847c45c655-844h5   30m          29Mi            
+===== 2026-08-13 10:20:19 =====
+NAME           REFERENCE                 TARGETS            MINPODS   MAXPODS   REPLICAS   AGE
+scaletestapp   Deployment/scaletestapp   memory: 367%/80%   1         10        2          7m57s
+NAME           READY   UP-TO-DATE   AVAILABLE   AGE     CONTAINERS     IMAGES                                         SELECTOR
+scaletestapp   4/4     4            4           7m57s   scaletestapp   ghcr.io/yandex-practicum/scaletestapp:latest   app=scaletestapp
+NAME                            READY   STATUS    RESTARTS      AGE     IP            NODE       NOMINATED NODE   READINESS GATES
+scaletestapp-847c45c655-844h5   1/1     Running   1 (47s ago)   2m38s   10.244.0.47   minikube   <none>           <none>
+scaletestapp-847c45c655-ds9ph   1/1     Running   0             42s     10.244.0.48   minikube   <none>           <none>
+scaletestapp-847c45c655-tn2dr   1/1     Running   0             12s     10.244.0.49   minikube   <none>           <none>
+scaletestapp-847c45c655-wzc7n   1/1     Running   0             12s     10.244.0.50   minikube   <none>           <none>
+NAME                            CPU(cores)   MEMORY(bytes)   
+scaletestapp-847c45c655-844h5   30m          29Mi            
+===== 2026-08-13 10:20:30 =====
+NAME           REFERENCE                 TARGETS            MINPODS   MAXPODS   REPLICAS   AGE
+scaletestapp   Deployment/scaletestapp   memory: 367%/80%   1         10        4          8m8s
+NAME           READY   UP-TO-DATE   AVAILABLE   AGE    CONTAINERS     IMAGES                                         SELECTOR
+scaletestapp   4/4     4            4           8m8s   scaletestapp   ghcr.io/yandex-practicum/scaletestapp:latest   app=scaletestapp
+NAME                            READY   STATUS    RESTARTS      AGE     IP            NODE       NOMINATED NODE   READINESS GATES
+scaletestapp-847c45c655-844h5   1/1     Running   1 (57s ago)   2m48s   10.244.0.47   minikube   <none>           <none>
+scaletestapp-847c45c655-ds9ph   1/1     Running   0             52s     10.244.0.48   minikube   <none>           <none>
+scaletestapp-847c45c655-tn2dr   1/1     Running   0             22s     10.244.0.49   minikube   <none>           <none>
+scaletestapp-847c45c655-wzc7n   1/1     Running   0             22s     10.244.0.50   minikube   <none>           <none>
+NAME                            CPU(cores)   MEMORY(bytes)   
+scaletestapp-847c45c655-844h5   30m          29Mi            
+===== 2026-08-13 10:20:40 =====
+NAME           REFERENCE                 TARGETS           MINPODS   MAXPODS   REPLICAS   AGE
+scaletestapp   Deployment/scaletestapp   memory: 71%/80%   1         10        4          8m18s
+NAME           READY   UP-TO-DATE   AVAILABLE   AGE     CONTAINERS     IMAGES                                         SELECTOR
+scaletestapp   4/4     4            4           8m18s   scaletestapp   ghcr.io/yandex-practicum/scaletestapp:latest   app=scaletestapp
+NAME                            READY   STATUS    RESTARTS      AGE     IP            NODE       NOMINATED NODE   READINESS GATES
+scaletestapp-847c45c655-844h5   1/1     Running   1 (67s ago)   2m58s   10.244.0.47   minikube   <none>           <none>
+scaletestapp-847c45c655-ds9ph   1/1     Running   0             62s     10.244.0.48   minikube   <none>           <none>
+scaletestapp-847c45c655-tn2dr   1/1     Running   0             32s     10.244.0.49   minikube   <none>           <none>
+scaletestapp-847c45c655-wzc7n   1/1     Running   0             32s     10.244.0.50   minikube   <none>           <none>
+NAME                            CPU(cores)   MEMORY(bytes)   
+scaletestapp-847c45c655-844h5   2m           9Mi             
+scaletestapp-847c45c655-ds9ph   2m           4Mi             
+scaletestapp-847c45c655-tn2dr   3m           4Mi             
+scaletestapp-847c45c655-wzc7n   3m           4Mi             
+===== 2026-08-13 10:20:50 =====
+NAME           REFERENCE                 TARGETS           MINPODS   MAXPODS   REPLICAS   AGE
+scaletestapp   Deployment/scaletestapp   memory: 71%/80%   1         10        4          8m28s
+NAME           READY   UP-TO-DATE   AVAILABLE   AGE     CONTAINERS     IMAGES                                         SELECTOR
+scaletestapp   4/4     4            4           8m28s   scaletestapp   ghcr.io/yandex-practicum/scaletestapp:latest   app=scaletestapp
+NAME                            READY   STATUS    RESTARTS      AGE    IP            NODE       NOMINATED NODE   READINESS GATES
+scaletestapp-847c45c655-844h5   1/1     Running   1 (77s ago)   3m8s   10.244.0.47   minikube   <none>           <none>
+scaletestapp-847c45c655-ds9ph   1/1     Running   0             72s    10.244.0.48   minikube   <none>           <none>
+scaletestapp-847c45c655-tn2dr   1/1     Running   0             42s    10.244.0.49   minikube   <none>           <none>
+scaletestapp-847c45c655-wzc7n   1/1     Running   0             42s    10.244.0.50   minikube   <none>           <none>
+NAME                            CPU(cores)   MEMORY(bytes)   
+scaletestapp-847c45c655-844h5   2m           9Mi             
+scaletestapp-847c45c655-ds9ph   2m           4Mi             
+scaletestapp-847c45c655-tn2dr   3m           4Mi             
+scaletestapp-847c45c655-wzc7n   3m           4Mi             
+===== 2026-08-13 10:21:00 =====
+NAME           REFERENCE                 TARGETS           MINPODS   MAXPODS   REPLICAS   AGE
+scaletestapp   Deployment/scaletestapp   memory: 71%/80%   1         10        4          8m39s
+NAME           READY   UP-TO-DATE   AVAILABLE   AGE     CONTAINERS     IMAGES                                         SELECTOR
+scaletestapp   4/4     4            4           8m39s   scaletestapp   ghcr.io/yandex-practicum/scaletestapp:latest   app=scaletestapp
+NAME                            READY   STATUS    RESTARTS      AGE     IP            NODE       NOMINATED NODE   READINESS GATES
+scaletestapp-847c45c655-844h5   1/1     Running   1 (88s ago)   3m19s   10.244.0.47   minikube   <none>           <none>
+scaletestapp-847c45c655-ds9ph   1/1     Running   0             83s     10.244.0.48   minikube   <none>           <none>
+scaletestapp-847c45c655-tn2dr   1/1     Running   0             53s     10.244.0.49   minikube   <none>           <none>
+scaletestapp-847c45c655-wzc7n   1/1     Running   0             53s     10.244.0.50   minikube   <none>           <none>
+NAME                            CPU(cores)   MEMORY(bytes)   
+scaletestapp-847c45c655-844h5   2m           9Mi             
+scaletestapp-847c45c655-ds9ph   2m           4Mi             
+scaletestapp-847c45c655-tn2dr   3m           4Mi             
+scaletestapp-847c45c655-wzc7n   3m           4Mi             
+===== 2026-08-13 10:21:11 =====
+NAME           REFERENCE                 TARGETS           MINPODS   MAXPODS   REPLICAS   AGE
+scaletestapp   Deployment/scaletestapp   memory: 71%/80%   1         10        4          8m49s
+NAME           READY   UP-TO-DATE   AVAILABLE   AGE     CONTAINERS     IMAGES                                         SELECTOR
+scaletestapp   4/4     4            4           8m49s   scaletestapp   ghcr.io/yandex-practicum/scaletestapp:latest   app=scaletestapp
+NAME                            READY   STATUS    RESTARTS      AGE     IP            NODE       NOMINATED NODE   READINESS GATES
+scaletestapp-847c45c655-844h5   1/1     Running   1 (98s ago)   3m29s   10.244.0.47   minikube   <none>           <none>
+scaletestapp-847c45c655-ds9ph   1/1     Running   0             93s     10.244.0.48   minikube   <none>           <none>
+scaletestapp-847c45c655-tn2dr   1/1     Running   0             63s     10.244.0.49   minikube   <none>           <none>
+scaletestapp-847c45c655-wzc7n   1/1     Running   0             63s     10.244.0.50   minikube   <none>           <none>
+NAME                            CPU(cores)   MEMORY(bytes)   
+scaletestapp-847c45c655-844h5   2m           9Mi             
+scaletestapp-847c45c655-ds9ph   2m           4Mi             
+scaletestapp-847c45c655-tn2dr   3m           4Mi             
+scaletestapp-847c45c655-wzc7n   3m           4Mi             

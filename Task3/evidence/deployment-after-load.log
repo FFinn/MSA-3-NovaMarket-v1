@@ -1,0 +1,2 @@
+NAME           READY   UP-TO-DATE   AVAILABLE   AGE   CONTAINERS     IMAGES                                         SELECTOR
+scaletestapp   10/10   10           10          19m   scaletestapp   ghcr.io/yandex-practicum/scaletestapp:latest   app=scaletestapp

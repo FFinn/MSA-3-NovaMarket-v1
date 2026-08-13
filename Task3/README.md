@@ -1,10 +1,15 @@
-# Task3 — запуск и доказательства работы HPA
+# Task3 — проверка HPA на локальном Minikube
 
-## Предпосылки
+## Что настроено
 
-Установлены Docker, `minikube`, `kubectl`, Python 3 и Locust (`python3 -m pip install locust`). HPA ориентируется на память, поэтому `metrics-server` обязателен.
+- `deployment.yaml` запускает `ghcr.io/yandex-practicum/scaletestapp:latest`, стартует с одной реплики и задаёт лимит памяти `30Mi`.
+- `service.yaml` открывает приложение внутри кластера на порту `8080`.
+- `hpa.yaml` масштабирует deployment по памяти: целевая утилизация `80%`, диапазон от 1 до 10 реплик.
+- `locustfile.py` содержит сценарий из задания: пользователь вызывает `GET /`.
 
-## Запуск
+`resources.requests.memory` выставлен в `8Mi`, а лимит оставлен `30Mi`. HPA считает процент утилизации от request, поэтому такой request позволяет увидеть рост раньше, чем контейнер упрётся в лимит памяти.
+
+## Команды запуска
 
 ```bash
 minikube start --cpus=4 --memory=6144
@@ -17,35 +22,47 @@ kubectl top pods
 kubectl get hpa -w
 ```
 
-Откройте сервис в отдельном терминале:
+Для локального доступа к приложению использовался tunnel Minikube:
 
 ```bash
-kubectl port-forward service/scaletestapp 8080:8080
+minikube service scaletestapp --url
 ```
 
-В ещё одном терминале, из папки `Task3`, запускайте Locust:
+В этом запуске команда выдала `http://127.0.0.1:60840`. При повторной проверке порт может быть другим.
+
+Locust запускался из корня репозитория:
 
 ```bash
-locust --host=http://localhost:8080
+.venv/bin/locust -f Task3/locustfile.py \
+  --headless \
+  --host=http://127.0.0.1:60840 \
+  --users 200 \
+  --spawn-rate 40 \
+  --run-time 1m \
+  --csv Task3/evidence/locust-service \
+  --html Task3/evidence/locust-service-report.html
 ```
 
-Откройте `http://localhost:8089`. Для эксперимента начните с 100–300 пользователей и hatch rate 20–50. Если память не достигает 80%, плавно увеличьте число пользователей: конкретный порог зависит от ресурсов локального компьютера и версии образа.
-
-## Что приложить после теста
-
-Результат не создан искусственно: его нужно снять с вашего Minikube после реальной нагрузки. Сохраните в `evidence/`:
+Для проверки масштабирования также снимался watch HPA во время более тяжёлой нагрузки:
 
 ```bash
-mkdir -p evidence
-kubectl get hpa -w | tee evidence/hpa-watch.log
-# после появления роста реплик остановите Ctrl+C
-kubectl get deployment scaletestapp -o wide > evidence/deployment-after-load.log
-kubectl get pods -l app=scaletestapp -o wide > evidence/pods-after-load.log
-kubectl top pods -l app=scaletestapp > evidence/pods-memory-after-load.log
-kubectl describe hpa scaletestapp > evidence/hpa-describe.log
+kubectl get hpa scaletestapp
+kubectl get deployment scaletestapp -o wide
+kubectl get pods -l app=scaletestapp -o wide
+kubectl top pods -l app=scaletestapp
+kubectl describe hpa scaletestapp
 ```
 
-Также можно положить скриншот `minikube dashboard` с количеством реплик и потреблением памяти. Для ревью важны признаки: `TARGETS` около/выше 80%, увеличение `REPLICAS` выше 1, несколько pod'ов приложения и события `SuccessfulRescale` в `describe hpa`.
+## Доказательства
+
+Фактические артефакты лежат в `Task3/evidence/`:
+
+- `before-load.log` — состояние перед нагрузкой: одна реплика.
+- `hpa-watch-balanced.log` — динамика под нагрузкой: HPA увидел `memory: 367%/80%` и начал поднимать deployment с 1 до 2 и 4 pod-ов.
+- `after-load.log`, `hpa-describe.log`, `events-after-load.log` — итоговое состояние после повторного прогона: deployment дошёл до 10 pod-ов, есть события `SuccessfulRescale`.
+- `kubernetes-dashboard-scaletestapp-full.png` — реальный скриншот Minikube Dashboard: deployment `scaletestapp`, `Pods status: 10 / 10`.
+- `locust-service-report.html` и `locust-service-report.png` — отчёт Locust: около 4 тысяч запросов, ошибок 0.
+- `locust-service_*.csv` — CSV-выгрузка Locust.
 
 ## Проверка метрик приложения
 
@@ -54,6 +71,8 @@ curl http://localhost:8080/
 curl http://localhost:8080/metrics | grep http_requests_total
 ```
 
-## Ограничение эксперимента
+## Замечание по локальной машине
 
-`HPA` масштабирует **поды приложения**, а не базу данных. Формулировка задания о «репликах базы данных» вероятно является оговоркой. В этой работе доказательством служит изменение числа реплик Deployment `scaletestapp`.
+Образ `ghcr.io/yandex-practicum/scaletestapp:latest` не содержит `linux/arm64` manifest. На Apple Silicon образ был заранее скачан как `linux/amd64` и загружен в Minikube, а в deployment указан `imagePullPolicy: IfNotPresent`. Также отключена инъекция Istio sidecar через `sidecar.istio.io/inject: "false"`, потому что в локальном default namespace уже был включён Istio, а sidecar искажал бы потребление памяти тестового контейнера.
+
+HPA масштабирует pod-ы приложения, а не базу данных. В задании фраза про «реплики базы данных» относится не к этому тестовому образу; в evidence показано изменение числа реплик deployment `scaletestapp`.

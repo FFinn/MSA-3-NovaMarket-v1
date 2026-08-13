@@ -13,15 +13,18 @@ spec:
     metadata:
       labels:
         app: scaletestapp
+      annotations:
+        sidecar.istio.io/inject: "false"
     spec:
       containers:
         - name: scaletestapp
           image: ghcr.io/yandex-practicum/scaletestapp:latest
+          imagePullPolicy: IfNotPresent
           ports:
             - containerPort: 8080
           resources:
             requests:
               cpu: 100m
-              memory: 30Mi
+              memory: 8Mi
             limits:
               memory: 30Mi
