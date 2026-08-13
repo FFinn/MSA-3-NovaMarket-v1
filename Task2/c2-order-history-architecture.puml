@@ -56,7 +56,7 @@ Rel(kafka, delivery, "PaymentSucceeded, OrderCancelled", "подписка")
 Rel(delivery, logisticsProvider, "Создание/отмена доставки; статусы", "HTTPS")
 Rel(delivery, kafka, "DeliveryCreated, DeliveryCreationFailed, DeliveryStatusChanged, DeliveryCancelled", "публикация")
 Rel(kafka, order, "Inventory*, Payment*, Delivery*", "подписка")
-Rel(kafka, notification, "PaymentSucceeded", "подписка")
+Rel(kafka, notification, "OrderConfirmed", "подписка")
 Rel(notification, seller, "Заказ готов к сборке", "push/e-mail")
 
 Rel(kafka, history, "Order*, Payment*, Delivery*", "подписка; создание/обновление проекции")
