@@ -69,14 +69,15 @@ else
   K -> O: DeliveryCreationFailed
   O -> O: Заказ = refund_pending
 end
-K -> O: PaymentRefunded
-K -> O: InventoryReservationReleased
-O -> O: После двух компенсаций\nзаказ = cancelled
-O -> K: OrderCancelled
-
-note right of O
-Если пришёл PaymentRefundFailed,
-заказ остаётся refund_pending:
-повтор возврата или ручная обработка.
-end note
+alt Возврат средств подтверждён
+  K -> O: PaymentRefunded
+  K -> O: InventoryReservationReleased
+  O -> O: После возврата и снятия резерва\nзаказ = cancelled
+  O -> K: OrderCancelled
+else Возврат средств не подтверждён
+  K -> O: PaymentRefundFailed
+  O -> O: Заказ = refund_pending\nповтор возврата или ручная обработка
+  K -> O: InventoryReservationReleased
+  O -> O: Зафиксировать снятие резерва;\nстатус остаётся refund_pending
+end
 @enduml
