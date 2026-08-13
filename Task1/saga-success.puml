@@ -43,12 +43,12 @@ else
   D -> K: Опубликовать DeliveryCreated
   deactivate D
 else
-  K -> N: PaymentSucceeded
-  N -> N: Уведомить продавца:\nзаказ готов к сборке
 end
 K -> O: DeliveryCreated
 activate O
-O -> O: Заказ = handed_to_delivery\nи OrderConfirmed в outbox
+O -> O: Заказ = preparing_for_shipment\nи OrderConfirmed в outbox
 O -> K: Опубликовать OrderConfirmed
 deactivate O
+K -> N: OrderConfirmed
+N -> N: Уведомить продавца:\nзаказ готов к сборке
 @enduml
