@@ -33,7 +33,11 @@ K -> O: PaymentCreated
 O -> O: Заказ = payment_pending, сохранить paymentId\nи ссылку на оплату
 B -> O: GET /orders/{orderId}
 O --> B: Ссылка на платёжную страницу\nили статус автоплатежа
-B -> PP: Подтвердить оплату
+alt Оплата вручную
+  B -> PP: Подтвердить оплату
+else Оплата привязанной картой
+  P -> PP: Запустить автоматическое списание
+end
 activate P
 PP --> P: Успех
 P -> K: Опубликовать PaymentSucceeded
