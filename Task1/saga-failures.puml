@@ -26,7 +26,7 @@ PP --> P: Успех
 P -> K: PaymentSucceeded
 K -> D: PaymentSucceeded
 D -> LP: Создать доставку
-LP --> D: Ошибка / timeout
+LP --> D: Ошибка / тайм-аут
 D -> K: DeliveryCreationFailed
 K -> P: DeliveryCreationFailed
 P -> PP: Компенсация: вернуть деньги
