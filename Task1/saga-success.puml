@@ -29,7 +29,7 @@ D -> K: Опубликовать DeliveryCreated
 deactivate D
 K -> O: PaymentSucceeded + DeliveryCreated
 activate O
-O -> O: Заказ = confirmed + OrderConfirmed в outbox
+O -> O: Заказ = confirmed\nOrderConfirmed записан в outbox
 O -> K: Опубликовать OrderConfirmed
 deactivate O
 par уведомление

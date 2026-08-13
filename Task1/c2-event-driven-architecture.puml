@@ -10,13 +10,13 @@ System_Ext(logistics, "Логистический провайдер", "Созд
 
 System_Boundary(novamarket, "NovaMarket") {
   Container(mobile, "Мобильное приложение", "iOS / Android", "Клиент MVP. Все запросы идут через API Gateway.")
-  Container(gateway, "API Gateway", "NGINX", "Маршрутизация, TLS, аутентификация, ограничение частоты запросов.")
+  Container(gateway, "API Gateway", "NGINX", "Маршрутизация, TLS, проверка доступа, ограничение частоты запросов.")
   Container(catalog, "Catalog Service", "Микросервис + БД каталога", "Каталог, цены, доступность товаров.")
   Container(order, "Order Service", "Микросервис + БД заказов", "Создаёт заказ и ведёт Saga. События пишет в outbox в той же транзакции.")
   Container(paymentService, "Payment Service", "Микросервис + БД платежей", "Инициирует оплату и выполняет компенсационный возврат.")
   Container(delivery, "Delivery Service", "Микросервис + БД доставок", "Создаёт и отслеживает доставку у внешнего провайдера.")
   Container(notification, "Notification Service", "Микросервис + БД уведомлений", "Уведомляет продавцов о подтверждённых заказах.")
-  ContainerQueue(kafka, "Kafka", "Брокер событий", "Асинхронная шина доменных событий. Топики партиционируются по orderId.")
+  ContainerQueue(kafka, "Kafka", "Брокер событий", "Асинхронная шина доменных событий. События одного заказа попадают в одну партицию по orderId.")
 }
 
 Rel(customer, mobile, "Использует")

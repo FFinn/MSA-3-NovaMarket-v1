@@ -40,6 +40,6 @@ else Возврат не выполнен
   PP --> P: Ошибка
   P -> K: PaymentRefundFailed
   K -> O: PaymentRefundFailed
-  O -> O: Заказ = refund_pending\nПовтор + ручная обработка
+  O -> O: Заказ = refund_pending\nнужен повтор или ручная обработка
 end
 @enduml
