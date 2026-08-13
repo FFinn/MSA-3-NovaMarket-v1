@@ -23,6 +23,11 @@ O -> K: OrderCreated
 K -> I: OrderCreated
 I -> K: InventoryReserved
 K -> P: InventoryReserved
+P -> PP: Создать платёжную сессию / запустить автоплатёж
+PP --> P: paymentId
+P -> K: PaymentCreated
+K -> O: PaymentCreated
+O -> O: Заказ = payment_pending
 P -> PP: Провести оплату
 PP --> P: Отказ
 P -> K: PaymentFailed
@@ -43,6 +48,11 @@ O -> K: OrderCreated
 K -> I: OrderCreated
 I -> K: InventoryReserved
 K -> P: InventoryReserved
+P -> PP: Создать платёжную сессию / запустить автоплатёж
+PP --> P: paymentId
+P -> K: PaymentCreated
+K -> O: PaymentCreated
+O -> O: Заказ = payment_pending
 P -> PP: Провести оплату
 PP --> P: Успех
 P -> K: PaymentSucceeded
@@ -81,3 +91,4 @@ else Возврат средств не подтверждён
   O -> O: Зафиксировать снятие резерва;\nстатус остаётся refund_pending
 end
 @enduml
+
