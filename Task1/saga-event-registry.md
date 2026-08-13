@@ -9,19 +9,19 @@
 | Заказ создан | domain | `OrderCreated` | Order Service | Inventory Service проверяет остатки и создаёт резерв. |
 | Товары успешно зарезервированы | domain | `InventoryReserved` | Inventory Service | Payment Service создаёт платёж и предоставляет покупателю платёжный сценарий. |
 | Товаров недостаточно / резерв не создан | failure | `InventoryReservationFailed` | Inventory Service | Order Service переводит заказ в `cancelled`. Оплата не начинается. |
-| Оплата проведена | domain | `PaymentSucceeded` | Payment Service | Delivery Service создаёт доставку; Notification Service уведомляет продавца о сборке; Order Service сохраняет `paid`. |
+| Оплата проведена | domain | `PaymentSucceeded` | Payment Service | Delivery Service создаёт доставку; Order Service сохраняет `paid`. |
 | Оплата отклонена | failure | `PaymentFailed` | Payment Service | Inventory Service снимает резерв; Order Service сохраняет причину отмены. |
 | Резерв снят | compensation | `InventoryReservationReleased` | Inventory Service | Order Service окончательно сохраняет `cancelled` после неоплаты или ошибки доставки. |
-| Доставка создана | domain | `DeliveryCreated` | Delivery Service | Order Service переводит заказ в `handed_to_delivery`, публикует `OrderConfirmed`. |
+| Заявка на доставку создана | domain | `DeliveryCreated` | Delivery Service | Order Service переводит заказ в `preparing_for_shipment` и публикует `OrderConfirmed`; продавец получает задачу на сборку. |
 | Создание доставки не удалось | failure | `DeliveryCreationFailed` | Delivery Service | Payment Service запускает возврат, Inventory Service независимо снимает резерв. |
 | Деньги возвращены | compensation | `PaymentRefunded` | Payment Service | Order Service фиксирует компенсацию; после освобождения резерва — `cancelled`. |
 | Автоматический возврат не выполнен | failure | `PaymentRefundFailed` | Payment Service | Order Service переводит заказ в `refund_pending`; повтор или ручная обработка. |
-| Заказ передан в доставку | domain | `OrderConfirmed` | Order Service | История заказов и клиентский интерфейс обновляют статус. |
-| Статус доставки изменён | domain | `DeliveryStatusChanged` | Delivery Service | Order Service и клиентское приложение показывают «в пути» / «доставлен», трек-номер и дату. |
+| Заказ подтверждён и готовится к отправке | domain | `OrderConfirmed` | Order Service | Notification Service уведомляет продавца; история и клиентский интерфейс показывают статус «Оплачен и готовится к отправке». |
+| Статус доставки изменён | domain | `DeliveryStatusChanged` | Delivery Service | При статусах `handed_to_delivery` и `delivered` Order Service и клиентское приложение показывают соответственно «Передан в доставку» и «Доставлен», а также трек-номер и дату. |
 
 ## Состояния заказа
 
-Успешный путь: `new → reservation_pending → reserved → payment_pending → paid → delivery_pending → handed_to_delivery → delivered`.
+Успешный путь: `new → reservation_pending → reserved → payment_pending → paid → delivery_pending → preparing_for_shipment → handed_to_delivery → delivered`.
 
 Ошибки: `reservation_pending → cancelled`; `payment_pending → cancellation_pending → cancelled`; `delivery_pending → refund_pending → cancelled`.
 
