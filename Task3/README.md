@@ -39,7 +39,6 @@ Locust запускался из корня репозитория:
   --users 200 \
   --spawn-rate 40 \
   --run-time 1m \
-  --csv Task3/evidence/locust-service \
   --html Task3/evidence/locust-service-report.html
 ```
 
@@ -59,10 +58,9 @@ kubectl describe hpa scaletestapp
 
 - `before-load.log` — состояние перед нагрузкой: одна реплика.
 - `hpa-watch-balanced.log` — динамика под нагрузкой: HPA увидел `memory: 367%/80%` и начал увеличивать число pod-ов с 1 до 2 и 4.
-- `after-load.log`, `hpa-describe.log`, `events-after-load.log` — состояние после повторного прогона: deployment дошёл до 10 pod-ов, есть события `SuccessfulRescale`.
+- `after-load.log` — состояние после повторного прогона: deployment дошёл до 10 pod-ов, внутри есть `kubectl describe hpa` и события `SuccessfulRescale`.
 - `kubernetes-dashboard-scaletestapp-full.png` — скриншот Minikube Dashboard: deployment `scaletestapp`, `Pods status: 10 / 10`.
-- `locust-service-report.html` и `locust-service-report.png` — отчёт Locust: около 4 тысяч запросов, ошибок 0.
-- `locust-service_*.csv` — CSV-выгрузка Locust.
+- `locust-service-report.png` — скриншот отчёта Locust: около 4 тысяч запросов, ошибок 0.
 
 ## Проверка метрик приложения
 
