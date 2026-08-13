@@ -1,0 +1,45 @@
+@startuml
+title Saga-хореография — ошибки оплаты и доставки
+autonumber
+participant "Order Service" as O
+queue Kafka as K
+participant "Payment Service" as P
+participant "Payment provider" as PP
+participant "Delivery Service" as D
+participant "Logistics provider" as LP
+
+== Неоплата ==
+O -> K: OrderCreated
+K -> P: OrderCreated
+P -> PP: Провести оплату
+PP --> P: Отказ
+P -> K: PaymentFailed
+K -> O: PaymentFailed
+O -> O: Заказ = cancelled
+O -> K: OrderCancelled
+
+== Доставка не создана после оплаты ==
+O -> K: OrderCreated
+K -> P: OrderCreated
+P -> PP: Провести оплату
+PP --> P: Успех
+P -> K: PaymentSucceeded
+K -> D: PaymentSucceeded
+D -> LP: Создать доставку
+LP --> D: Ошибка / timeout
+D -> K: DeliveryCreationFailed
+K -> P: DeliveryCreationFailed
+P -> PP: Компенсация: вернуть деньги
+alt Возврат успешен
+  PP --> P: Деньги возвращены
+  P -> K: PaymentRefunded
+  K -> O: PaymentRefunded
+  O -> O: Заказ = cancelled
+  O -> K: OrderCancelled
+else Возврат не выполнен
+  PP --> P: Ошибка
+  P -> K: PaymentRefundFailed
+  K -> O: PaymentRefundFailed
+  O -> O: Заказ = refund_pending\nПовтор + ручная обработка
+end
+@enduml

@@ -1,0 +1,31 @@
+@startuml
+!include <C4/C4_Container>
+LAYOUT_TOP_DOWN()
+title NovaMarket — C2 после добавления истории покупок
+
+Person(customer, "Покупатель", "Смотрит список и детали своих заказов.")
+System_Ext(receipt, "Сервис чеков", "Формирует/хранит юридически значимые чеки.")
+System_Boundary(novamarket, "NovaMarket") {
+ Container(mobile, "Клиенты", "Mobile/Web/Chatbot", "Несколько клиентских каналов.")
+ Container(gateway, "API Gateway", "NGINX", "Единая точка входа.")
+ Container(bff, "Customer BFF", "API Composition", "Оптимизированный для экранов API. Читает только готовую проекцию истории.")
+ Container(history, "History Projection Service", "CQRS read model", "Подписывается на события, поддерживает денормализованную проекцию заказа, строк товаров, доставки, оплаты и ссылки на чек.")
+ ContainerDb(historyDb, "Order History Read DB", "PostgreSQL / document DB", "Индексированная read-модель по customerId и дате заказа.")
+ ContainerQueue(kafka, "Kafka", "Event broker", "Доменные события из Task1.")
+ Container(order, "Order Service", "Микросервис", "Источник истины статуса заказа.")
+ Container(catalog, "Catalog Service", "Микросервис", "Источник названий/изображений товаров.")
+ Container(payment, "Payment Service", "Микросервис", "Источник оплаты.")
+ Container(delivery, "Delivery Service", "Микросервис", "Источник доставки.")
+}
+Rel(customer, mobile, "Использует")
+Rel(mobile, gateway, "HTTPS")
+Rel(gateway, bff, "GET /me/orders, /me/orders/{id}")
+Rel(bff, historyDb, "Один запрос на список или детали", "SQL/read API")
+Rel(bff, receipt, "Получает ссылку на скачивание чека", "HTTPS, только по запросу")
+Rel(order, kafka, "OrderCreated, OrderConfirmed, OrderCancelled", "publish")
+Rel(payment, kafka, "PaymentSucceeded, PaymentRefunded", "publish")
+Rel(delivery, kafka, "DeliveryCreated, DeliveryCancelled", "publish")
+Rel(catalog, kafka, "ProductSnapshotChanged", "publish")
+Rel(kafka, history, "Подписка на события", "consume")
+Rel(history, historyDb, "Создаёт/обновляет read-модель")
+@enduml

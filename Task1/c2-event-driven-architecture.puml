@@ -1,0 +1,36 @@
+@startuml
+!include <C4/C4_Container>
+LAYOUT_TOP_DOWN()
+title NovaMarket — контейнерная диаграмма C2, MVP и EDA
+
+Person(customer, "Покупатель", "Смотрит каталог и оформляет заказ в мобильном приложении.")
+Person(seller, "Продавец", "Получает уведомления о новых заказах.")
+System_Ext(payment, "Платёжный провайдер", "Подтверждает или отклоняет оплату.")
+System_Ext(logistics, "Логистический провайдер", "Создаёт доставку и сообщает её статус.")
+
+System_Boundary(novamarket, "NovaMarket") {
+  Container(mobile, "Мобильное приложение", "Mobile app", "Клиент MVP. REST-запросы только к API Gateway.")
+  Container(gateway, "API Gateway", "NGINX", "Маршрутизация, TLS, аутентификация, rate limit.")
+  Container(catalog, "Catalog Service", "Микросервис + БД каталога", "Каталог, цены, доступность товаров.")
+  Container(order, "Order Service", "Микросервис + БД заказов", "Создаёт заказ и ведёт Saga. Пишет доменные события в outbox в той же транзакции.")
+  Container(paymentService, "Payment Service", "Микросервис + БД платежей", "Инициирует оплату и выполняет компенсационный возврат.")
+  Container(delivery, "Delivery Service", "Микросервис + БД доставок", "Создаёт и отслеживает доставку у внешнего провайдера.")
+  Container(notification, "Notification Service", "Микросервис + БД уведомлений", "Уведомляет продавцов о подтверждённых заказах.")
+  ContainerQueue(kafka, "Kafka", "Event broker", "Надёжная асинхронная шина доменных событий. Топики партиционируются по orderId.")
+}
+
+Rel(customer, mobile, "Использует")
+Rel(mobile, gateway, "HTTPS/JSON")
+Rel(gateway, catalog, "Запрос каталога", "REST")
+Rel(gateway, order, "Создание и просмотр заказа", "REST")
+Rel(order, kafka, "OrderCreated, OrderConfirmed, OrderCancelled", "publish via outbox")
+Rel(kafka, paymentService, "OrderCreated", "subscribe")
+Rel(paymentService, payment, "Оплата / возврат", "HTTPS")
+Rel(paymentService, kafka, "PaymentSucceeded, PaymentFailed, PaymentRefunded", "publish")
+Rel(kafka, delivery, "PaymentSucceeded, OrderCancelled", "subscribe")
+Rel(delivery, logistics, "Создание / отмена доставки", "HTTPS")
+Rel(delivery, kafka, "DeliveryCreated, DeliveryCreationFailed, DeliveryCancelled", "publish")
+Rel(kafka, order, "Payment* и Delivery*", "subscribe; продолжает Saga")
+Rel(kafka, notification, "OrderConfirmed", "subscribe")
+Rel(notification, seller, "Новое подтверждённое оформление", "push/e-mail")
+@enduml
